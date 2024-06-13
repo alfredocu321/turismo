@@ -10,30 +10,29 @@
     <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
     <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@3.x.x/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe-extras/dist/aframe-extras.min.js"></script>
     <script>
-       
-AFRAME.registerComponent('set-image', {
-    schema: {
-        on: { type: 'string' },
-        target: { type: 'selector' },
-        src: { type: 'string' },
-        dur: { type: 'number', default: 300 }
-    },
-    init: function () {
-        const data = this.data;
-        const el = this.el;
+        AFRAME.registerComponent('set-image', {
+            schema: {
+                on: { type: 'string' },
+                target: { type: 'selector' },
+                src: { type: 'string' },
+                dur: { type: 'number', default: 300 }
+            },
+            init: function () {
+                const data = this.data;
+                const el = this.el;
 
-        el.addEventListener(data.on, function () {
-            // Set image.
-            data.target.setAttribute('material', 'src', data.src);
+                el.addEventListener(data.on, function () {
+                    // Set image.
+                    data.target.setAttribute('material', 'src', data.src);
+                });
+            }
         });
-    }
-});
-</script>
     </script>
 </head>
 <body>
-    <a-scene>
+    <a-scene oculus-touch-controls-enabled>
         <a-assets>
             <audio id="click-sound" src="audio/click.ogg"></audio>
             <!-- Images. -->
@@ -69,7 +68,7 @@ AFRAME.registerComponent('set-image', {
             <a-entity template="src: #plane" data-thumb="#city-thumb" data-image="#templo"></a-entity>
         </a-entity>
         <!-- Camera + Cursor. -->
-        <a-camera>
+        <a-camera oculus-touch-controls="hand: left">
             <a-cursor id="cursor">
                 <a-animation begin="click" easing="ease-in" attribute="scale"
                             fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
