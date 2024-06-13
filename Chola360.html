@@ -1,0 +1,111 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@%5E3.2.x/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@3.x.x/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@3.x.x/dist/aframe-event-set-component.min.js"></script>
+    <script>
+        AFRAME.registerComponent('set-image', {
+  
+  schema: {
+    on: {type: 'string'},
+    target: {type: 'selector'},
+    src: {type: 'string'},
+    dur: {type: 'number', default: 300}
+  },
+  
+  init: function () {
+    console.log('set-image init')
+    const data = this.data;
+    const el = this.el;
+    
+    this.setupFadeAnimation();
+    
+    el.addEventListener(data.on, function () {
+      console.log("clicked");
+      // Fade out image.
+      data.target.emit('set-image-fade');
+      // Wait for fade to complete.
+      setTimeout(function () {
+        // Set image.
+        data.target.setAttribute('material', 'src', data.src);
+      }, data.dur);
+    });
+  },
+  
+  setupFadeAnimation: function () {
+    const data = this.data;
+    const targetEl = this.data.target;
+
+    // Only set up once.
+    if (targetEl.dataset.setImageFadeSetup) { return; }
+    targetEl.dataset.setImageFadeSetup = true;
+
+    // Create animation.
+    targetEl.setAttribute('animation__fade', {
+      property: 'material.color',
+      startEvents: 'set-image-fade',
+      dir: 'alternate',
+      dur: data.dur,
+      from: '#FFF',
+      to: '#000'
+    });
+  }
+});
+    </script>
+  </head>
+  
+  <body>
+  
+    <a-scene>
+      <a-assets>
+        <audio id="click-sound" src="audio/click.ogg"></audio>
+        <!-- Images. -->
+        <img id="city" src="images/360/PANO_20230801_164426_3.jpg">
+        <img id="city-thumb" src="images/inicio2.jpeg">
+        
+        <img id="cubes" src="images/360/PANO_20230801_165347_7.jpg">
+        <img id="cubes-thumb" src="images/habitacion.jpg.jpeg">
+
+
+        <script id="plane" type="text/html">
+          <a-entity class="link"
+          geometry="primitive: plane; height: 1: width: 1"
+          material="shader: flat; src: ${thumb}"
+          sound="on: click; src: #click-sound"
+          set-image="on: click; target: #image-360; src: ${image}"
+          event-set__1="_event: mousedown; scale: 1 1 1"
+          event-set__2="_event: mouseup; scale: 1.2 1.2 1"
+          event-set__3="_event: mouseenter; scale: 1.2 1.2 1"
+          event-set__4="_event: mouseleave; scale: 1 1 1"></a-entity>
+        </script>
+      </a-assets>
+      <!-- 360-degree image. -->
+      <a-sky id="image-360" radius="10" src="#city"></a-sky>
+      <!-- Link we will build. -->
+      <a-entity id="links" layout="layout: line; margin: 1.5" position="1.5 0 -2.5">
+
+  <a-entity template="src: #plane" data-thumb="#cubes-thumb" data-image="#cubes"></a-entity>
+    <a-entity template="src: #plane" data-thumb="#city-thumb" data-image="#city"></a-entity>
+</a-entity>
+
+
+      <!-- Camera + Cursor. -->
+      <a-camera>
+        <a-cursor id="cursor">
+          <a-animation begin="click" easing="ease-in" attribute="scale"
+                       fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
+          <a-animation begin="cursor-fusing" easing="ease-in" attribute="scale"
+                       from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
+        </a-cursor>
+      </a-camera>
+    </a-scene>
+  </body>
+  
+</html>
