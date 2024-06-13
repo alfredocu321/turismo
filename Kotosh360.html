@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kostosh 360°</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-animation-component@3.2.x/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@%5E3.2.x/dist/aframe-animation-component.min.js"></script>
     <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
     <script src="https://unpkg.com/aframe-layout-component@3.x.x/dist/aframe-layout-component.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@3.x.x/dist/aframe-event-set-component.min.js"></script>
@@ -73,17 +73,13 @@
         <img id="cubes" src="images/360/PANO_20230801_121849_3.jpg" />
         <img id="cubes-thumb" src="images/museo.jpg" />
 
-        <img
-          id="sechelt"
-          src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg"
-        />
         <img id="sechelt-thumb" src="images/inicio.jpg" />
         <img id="templo" src="images/360/PANO_20230801_124759_0.jpg" />
 
         <script id="plane" type="text/html">
           <a-entity
             class="link"
-            geometry="primitive: plane; height: 1; width: 1"
+            geometry="primitive: plane; height: 1: width: 1"
             material="shader: flat; src: ${thumb}"
             sound="on: click; src: #click-sound"
             set-image="on: click; target: #image-360; src: ${image}"
@@ -127,7 +123,7 @@
       </a-entity>
 
       <!-- Camera + Cursor. -->
-      <a-camera position="0 1.6 0">
+      <a-camera camera="true" hand-tracking="true" teleportation="true">
         <a-cursor id="cursor">
           <a-animation
             begin="click"
